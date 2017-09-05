@@ -88,10 +88,10 @@ def robust_request(twitter, resource, params, max_tries=5):
         request = twitter.request(resource, params)
         if request.status_code == 200:
             return request
-        else:
-            print('Got error %s \nsleeping for 15 minutes.' % request.text)
-            sys.stderr.flush()
-            time.sleep(61 * 15)
+      #  else:
+         #   print('Got error %s \nsleeping for 15 minutes.' % request.text)
+        #    sys.stderr.flush()
+       #     time.sleep(61 * 15)
 
 
 def get_users(twitter, screen_names):
