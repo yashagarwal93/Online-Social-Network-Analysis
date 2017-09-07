@@ -73,7 +73,6 @@ def read_screen_names(filename):
     return lines
     pass
 
-
 # I've provided the method below to handle Twitter's rate limiting.
 # You should call this method whenever you need to access the Twitter API.
 def robust_request(twitter, resource, params, max_tries=5):
