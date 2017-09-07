@@ -37,10 +37,10 @@ import sys
 import time
 from TwitterAPI import TwitterAPI
 
-consumer_key = 'fixme'
-consumer_secret = 'fixme'
-access_token = 'fixme'
-access_token_secret = 'fixme'
+consumer_key = 'BtO1b9bcP4P9Ra1uYJXqBdix9'
+consumer_secret = 'N5DXG4AiICHt5h1gfMuGciJT21yFlEvPfbFivTJ07etgtU8BFM'
+access_token = '43856450-pHMoGhdowJBhe2yk5afGxAk2TkkNrgPYf64tF49mP'
+access_token_secret = 'EVVqqs3s6LQV8G6OVnJcEwgUAUlzwsaNNfMv2dsRnFtMH'
 
 
 # This method is done for you.
@@ -67,6 +67,10 @@ def read_screen_names(filename):
     ['DrJillStein', 'GovGaryJohnson', 'HillaryClinton', 'realDonaldTrump']
     """
     ###TODO
+    screen_name = open("candidates.txt","r")
+    line=screen_name.readlines()
+    lines= [x.strip() for x in line]
+    return lines
     pass
 
 
@@ -88,10 +92,10 @@ def robust_request(twitter, resource, params, max_tries=5):
         request = twitter.request(resource, params)
         if request.status_code == 200:
             return request
-      #  else:
-         #   print('Got error %s \nsleeping for 15 minutes.' % request.text)
-        #    sys.stderr.flush()
-       #     time.sleep(61 * 15)
+        else:
+            print('Got error %s \nsleeping for 15 minutes.' % request.text)
+            sys.stderr.flush()
+            time.sleep(61 * 15)
 
 
 def get_users(twitter, screen_names):
@@ -113,6 +117,9 @@ def get_users(twitter, screen_names):
     [6253282, 783214]
     """
     ###TODO
+    request = twitter.request('users/lookup', {'screen_name': screen_names})
+    friends = [r for r in request]
+    return friends
     pass
 
 
@@ -138,6 +145,9 @@ def get_friends(twitter, screen_name):
     [695023, 1697081, 8381682, 10204352, 11669522]
     """
     ###TODO
+    request = twitter.request('friends/ids', {'screen_name': screen_name, 'count':5000})
+    friends = [r for r in request]
+    return sorted(friends)
     pass
 
 
@@ -160,6 +170,15 @@ def add_all_friends(twitter, users):
     [695023, 1697081, 8381682, 10204352, 11669522]
     """
     ###TODO
+    for a  in range(len(users)):
+        alist=[]
+        count=0
+
+        r = get_friends(twitter,users[a]['screen_name'])
+        for item in r:
+            alist.append(item)
+        alist.sort()
+        users[a]['friends']=alist
     pass
 
 
@@ -172,6 +191,11 @@ def print_num_friends(users):
         Nothing
     """
     ###TODO
+    for a  in range(len(users)):
+        count=0
+        for item in users[a]['friends']:
+            count+=1
+        print( users[a]['screen_name'],count)
     pass
 
 
@@ -189,6 +213,12 @@ def count_friends(users):
     [(2, 3), (3, 2), (1, 1)]
     """
     ###TODO
+    import collections
+    from collections import Counter  # This is just a fancy dict mapping from object->int, starting at 0.
+    m = Counter()
+    for a in range(len(users)):
+        m.update(users[a]['friends'])
+    return (m)
     pass
 
 
@@ -214,6 +244,23 @@ def friend_overlap(users):
     [('a', 'c', 3), ('a', 'b', 2), ('b', 'c', 2)]
     """
     ###TODO
+    a1=[]
+    count=0
+    from collections import Counter  # This is just a fancy dict mapping from object->int, starting at 0.
+    c = Counter()
+    for a in range(len(users)-1):
+        for x in range(len(users)):
+            if (x>a):
+                c.update(users[a]['friends'])
+                c.update(users[x]['friends'])
+                for i in c:
+                    if c[i] == 2:
+                        count+=1
+                l=(users[a]['screen_name'],users[x]['screen_name'],count)
+                a1.append(l)
+                c.clear()
+                count=0
+    return sorted(a1, key=lambda x:(x[2]),reverse=True)
     pass
 
 
@@ -232,6 +279,20 @@ def followed_by_hillary_and_donald(users, twitter):
         that is followed by both Hillary Clinton and Donald Trump.
     """
     ###TODO
+    from collections import Counter  # This is just a fancy dict mapping from object->int, starting at 0.
+    x = Counter()
+    name=""
+    for a in range(len(users)):
+        if users[a]['screen_name']=='HillaryClinton':
+            x.update(users[a]['friends'])
+        elif users[a]['screen_name']=='realDonaldTrump':
+            x.update(users[a]['friends'])
+    for value,count in Counter(x).most_common(1):
+        name=value
+
+    request= twitter.request('users/lookup', {'user_id':str(name)})
+    for r in request:
+        return (r['screen_name'])
     pass
 
 
@@ -251,6 +312,15 @@ def create_graph(users, friend_counts):
       A networkx Graph
     """
     ###TODO
+    import warnings
+    G = nx.Graph()
+    for user in users:
+        G.add_node(user['screen_name'])
+        for friend in range(len(user['friends'])):
+            if friend_counts[user['friends'][friend]] > 1:
+                G.add_node(user['friends'][friend])
+                G.add_edge(user['friends'][friend],user['screen_name'])
+    return G
     pass
 
 
@@ -265,6 +335,15 @@ def draw_network(graph, users, filename):
     make it look presentable.
     """
     ###TODO
+    user_list={}
+    for user in users:
+        user_list[user['screen_name']]=user['screen_name']
+
+    plt.figure(figsize=(12,12))
+    nx.draw_networkx(graph,labels=user_list,with_labels=True,alpha=.5, width=.2)
+    plt.axis("off")
+    plt.savefig(filename)
+
     pass
 
 
