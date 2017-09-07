@@ -9,11 +9,9 @@ Trump.
 
 How is this approach misleading? How might you fix it?
 
-
-
-
-
-
+Yes, this approach is misleading, one cannot compare and say that Jill Steih and Gary Johnson are more similar than Donald Trump and Hillary Clinton, by just one fact. If you see Jill Steih follows 1648 people and Gar Johnson follows 3481 people, while Hillary Clinton and Donald Trump follows 762 people and 45 people respectively. If you see in the friend overlap function Jill Steih have 238 common friends from a total of 5129 friends, while Hillary and Donald have 1 common friend from a total of 807 friends, so if you see from this observation Donald and Hillary seems to be more similar than Jill and Gary.
+Though the best approach is to use Jaccard Index. It can be used by comparing the similarity of the given data set.
+J(X,Y) = |X Intersection Y|/ |X Union Y|
 
 
 
@@ -24,7 +22,7 @@ who are rivals? Do some web searches to see if you can find out more
 information.
 
 
-
+As Hillary Clinton and Donald Trump both were against each other in 2016 Presidential Election to be in the White House. Donald Trump now being the President of the United States and Hillary Clinton being one of the most popular presidential candidate, and as Hillary Clinton was supported by Barack Obama the 44th President of United States, the WhiteHouse twitter handle directly present the information from President’s of United States, that’s why the WhiteHouse is followed by both Hillary Clinton and Donald Trump.
 
 
 
@@ -40,6 +38,8 @@ Johnson follows over 3K accounts, while Donald Trump follows less than
 50). Why do you think this is? How might that affect our analysis?
 
 
+Gary Earl Johnson is an American businessman, author, and politician. He was the 29th Governor of New Mexico from 1995 to 2003 as a member of the Republican Party. He was also the Libertarian Party nominee for President of the United States in the 2012 and 2016 elections. While Donald Trump is the 45th President of United States and was a very successful and known business before becoming the President of United States. Since Donald Trump is already very influential and popular so he doesn’t need to follow many people to share his view, he only follows his different companies, family friends and business partners, while Gary Johnson is not that influential or popular as other presidential candidates, so he need to follow many people to share his view and make a standing and as well expand his business opportunity.
+I think the only affect on our analysis will be that as Donald Trump friends are less, more twitter request can be placed without giving twitter 429 error.
 
 
 
