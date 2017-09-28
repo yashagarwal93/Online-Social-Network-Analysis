@@ -122,6 +122,7 @@ def complexity_of_bfs(V, E, K):
     True
     """
     ###TODO
+    return (V+E)
     pass
 
 
@@ -238,6 +239,7 @@ def is_approximation_always_right():
     <class 'str'>
     """
     ###TODO
+    return ('no')
     pass
 
 
