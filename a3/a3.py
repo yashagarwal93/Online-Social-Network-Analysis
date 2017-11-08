@@ -55,6 +55,11 @@ def tokenize(movies):
     [['horror', 'romance'], ['sci-fi']]
     """
     ###TODO
+    tokens = []
+    for row in movies["genres"]:
+        tokens.append(tokenize_string(row))
+    movies["tokens"] = tokens
+    return movies
     pass
 
 
@@ -81,6 +86,42 @@ def featurize(movies):
       - The vocab, a dict from term to int. Make sure the vocab is sorted alphabetically as in a2 (e.g., {'aardvark': 0, 'boy': 1, ...})
     """
     ###TODO
+    listvocab= []
+
+    new_list = []
+    vocab = dict()
+    for i in range(len(movies)):
+        listvocab.append(movies['tokens'][i])
+    listvocab = [vocab for sublist in listvocab for vocab in sublist]
+    c = 0
+    for k in sorted(set(listvocab)):
+        vocab[k] = c
+        c += 1
+
+    new_count = Counter()
+    for i in list(movies['tokens']):
+        new_count.update(set(i))
+
+
+    value=[]
+    N = movies.shape[0]
+    for row in movies['tokens']:
+        data = []
+        rows = []
+        column = []
+        most_common_term,max_k_tf = Counter(row).most_common(1)[0]
+
+        for term in set(row):
+            tf = row.count(term)
+            tfidf = tf / max_k_tf*math.log10(N / new_count[term])
+            rows.append(0)
+            column.append(vocab[term])
+            data.append(tfidf)
+        value.append(csr_matrix((data, (rows, column)),shape=(1,len(vocab))))
+
+    movies['features']= value
+
+    return movies,vocab
     pass
 
 
@@ -106,6 +147,20 @@ def cosine_sim(a, b):
       where ||a|| indicates the Euclidean norm (aka L2 norm) of vector a.
     """
     ###TODO
+    for i in range(a.shape[0]):
+        a_to_list = a[i].todense().tolist()
+    for i in range(b.shape[0]):
+        b_to_list = b[i].todense().tolist()
+
+    numer = 0
+    denom1 = 0
+    denom2 = 0
+    for i in range(len(a_to_list[0])):
+        numer += (a_to_list[0][i] * b_to_list[0][i])
+        denom1 += (a_to_list[0][i] ** 2)
+        denom2 +=  (b_to_list[0][i] ** 2)
+
+    return(numer)/(math.sqrt(denom1) * math.sqrt(denom2))
     pass
 
 
@@ -132,6 +187,32 @@ def make_predictions(movies, ratings_train, ratings_test):
       A numpy array containing one predicted rating for each element of ratings_test.
     """
     ###TODO
+    ans=ratings_test.copy(deep=True)
+    for index,row in ratings_test.iterrows():
+        b=movies[movies.movieId==row.movieId].iloc[0]['features']
+        weighted_avg = 0.0
+        weightsum=0.0
+        count=0
+        div=0
+        usersRate=ratings_train[ratings_train.userId==row.userId]
+        for index1,row1 in usersRate.iterrows():
+                    row_mov_movies=movies[movies.movieId==row1.movieId].iloc[0]['features']
+                    a=row_mov_movies
+                    a_b=cosine_sim(a,b)
+                    if(a_b>0):
+                        div +=a_b
+                        weightsum +=a_b*row1.rating
+                        count +=1
+        if(count>0):
+            weighted_avg=weightsum/div
+        elif(count==0):
+             weighted_avg=np.mean(usersRate.rating)
+
+        ans.set_value(index=index,col="rating",value=weighted_avg)
+
+    ans = ans["rating"].values
+
+    return ans
     pass
 
 
