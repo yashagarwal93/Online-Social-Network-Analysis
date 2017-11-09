@@ -187,13 +187,14 @@ def make_predictions(movies, ratings_train, ratings_test):
       A numpy array containing one predicted rating for each element of ratings_test.
     """
     ###TODO
-    ans=ratings_test.copy(deep=True)
+    ans=[]
     for index,row in ratings_test.iterrows():
         b=movies[movies.movieId==row.movieId].iloc[0]['features']
-        weighted_avg = 0.0
-        weightsum=0.0
+        weighted_avg = 0
+        weightsum=0
         count=0
         div=0
+        mean=0
         usersRate=ratings_train[ratings_train.userId==row.userId]
         for index1,row1 in usersRate.iterrows():
                     row_mov_movies=movies[movies.movieId==row1.movieId].iloc[0]['features']
@@ -202,17 +203,14 @@ def make_predictions(movies, ratings_train, ratings_test):
                     if(a_b>0):
                         div +=a_b
                         weightsum +=a_b*row1.rating
-                        count +=1
-        if(count>0):
-            weighted_avg=weightsum/div
-        elif(count==0):
-             weighted_avg=np.mean(usersRate.rating)
 
-        ans.set_value(index=index,col="rating",value=weighted_avg)
+        if(div>0):
+            ans.append(weightsum/div)
+        else:
+             ans.append(np.mean(usersRate.rating))
+        
 
-    ans = ans["rating"].values
-
-    return ans
+    return np.array(ans)
     pass
 
 
