@@ -1,0 +1,115 @@
+This Assignment is based on the data collected from the Twitter based on the NBA teams and its hash tags:
+hashtags=['#Celtics','#DetroitBasketball','#DefendTheLand','#WeTheNorth','#MADEinPHILA']
+
+1.collect.py
+Here I am collecting tweets for each hashtag and storing the tweets in each pickle file with the name of the file
+here are the file created
+#Celtics.pkl
+#DetroitBasketball.pkl
+#DefendTheLand.pkl
+#WeTheNorth.pkl
+thunderup.pkl
+#MADEinPHILA.pkl
+
+#1.1
+For collecting unique tweets I store my id of the tweet each time I run. and later when I re-run my code i will be able to 
+get the unique tweets
+It is my request to please run the collect.py file several times so that more and more tweets are collected and stored. Each time when this file is compiled only 100 tweets for each hashtag are collected and stored with their unique tweet id, so every time when we compile the code it will collect different tweets. We need at least 700-800 tweets for each hashtag for performing proper communities detection
+
+#1.2
+The following output is achieved by compiling the around 15 times
+Established Twitter connection.
+Started collecting tweets From Twitter Based on hashtags
+Data Collected for: #Celtics
+Total No. of Users who tweets for this hashtag: 2099
+Total Tweets collected for #Celtics: 3600
+Data Collected for: #DetroitBasketball
+Total No. of Users who tweets for this hashtag: 2364
+Total Tweets collected for #DetroitBasketball: 3499
+Data Collected for: #DefendTheLand
+Total No. of Users who tweets for this hashtag: 367
+Total Tweets collected for #DefendTheLand: 672
+Data Collected for: #WeTheNorth
+Total No. of Users who tweets for this hashtag: 1889
+Total Tweets collected for #WeTheNorth: 3494
+Data Collected for: #MADEinPHILA
+Total No. of Users who tweets for this hashtag: 42
+Total Tweets collected for #MADEinPHILA: 170
+tweets saved to each hashtags file
+
+
+
+2. cluster.py
+In this file I�m passing my previously collected values from collect to cluster. and I select only users who have twitted on two teams only and made a graph for them
+Also, here I have removed all those user who follows or tweeted only for a single team. Then I�m doing further analysis using grivan newman to identify cluster.
+All the tweets and cluster information is stored in a file Cluster.pkl
+
+ Output of cluster.py
+
+Mutual number of followers for the team #Celtics #DefendTheLand ----> 15
+Mutual number of followers for the team #Celtics #DetroitBasketball ----> 185
+Mutual number of followers for the team #Celtics #WeTheNorth ----> 34
+Mutual number of followers for the team #Celtics #MADEinPHILA ----> 5
+Mutual number of followers for the team #DefendTheLand #DetroitBasketball ----> 17
+Mutual number of followers for the team #DefendTheLand #WeTheNorth ----> 15
+Mutual number of followers for the team #DefendTheLand #MADEinPHILA ----> 8
+Mutual number of followers for the team #DetroitBasketball #WeTheNorth ----> 98
+Mutual number of followers for the team #DetroitBasketball #MADEinPHILA ----> 8
+Mutual number of followers for the team #WeTheNorth #MADEinPHILA ----> 9
+graph has 308 nodes and 643 edges
+cluster 1  Number of nodes/followers 20
+cluster 2  Number of nodes/followers 11
+cluster 3  Number of nodes/followers 20
+Cluster Information stored in file
+
+Note: The graph�s are saved in different .png file
+
+
+3. clasify.py
+
+It makes use of the data piped out of previous process and out of which a sample of tweets is labeled manually by reading the tweets and identified as positive or negative tweet, which is then used as the training dataset to train the models which predicts the output label for the test or any future data.
+We have files with same name as the hashtag which has tweets corresponding to each team. once the tweets are read and fit into the model. The predicted label is attached to the CSV file
+Computed average testing accuracy for each model over k-fold of Cross validation  and accuracy comparison analysis is made and documented.
+#files
+Celtics.csv
+WeTheNorth'.csv
+MADEinPHILA.csv
+DetroitBasketball.csv
+DefendTheLand.csv
+
+output of the file:
+Logistic Regression Results for team #Celtics
+	 Total Number of Tweets aganist team				 1874
+	 No.of Unique users who tweeted aganist team			 1329
+	 Number of Tweets supporting team 				1726
+	 No.of Unique users who tweeted supporting the team		 1096
+Logistic Regression Results for team #DetroitBasketball
+	 Total Number of Tweets aganist team				 2640
+	 No.of Unique users who tweeted aganist team			 1870
+	 Number of Tweets supporting team 				859
+	 No.of Unique users who tweeted supporting the team		 721
+Logistic Regression Results for team #DefendTheLand
+	 Total Number of Tweets aganist team				 209
+	 No.of Unique users who tweeted aganist team			 120
+	 Number of Tweets supporting team 				463
+	 No.of Unique users who tweeted supporting the team		 268
+Logistic Regression Results for team #WeTheNorth
+	 Total Number of Tweets aganist team				 208
+	 No.of Unique users who tweeted aganist team			 170
+	 Number of Tweets supporting team 				3286
+	 No.of Unique users who tweeted supporting the team		 1812
+Logistic Regression Results for team #MADEinPHILA
+	 Total Number of Tweets aganist team				 60
+	 No.of Unique users who tweeted aganist team			 22
+	 Number of Tweets supporting team 				110
+	 No.of Unique users who tweeted supporting the team		 26
+
+
+
+4. summerize.py
+Information from other stored file is gathered and printed
+Insight from the analysis:
+
+
+WeTheNorth is a team which has the less number of people against it when compared to the people supporting it. While it vice-versa for DetroitBasketball, there are more number of people saying bad about the team, while there are less supporting it.
+On the other hand #Celtics has almost equal number of haters and supporters.
