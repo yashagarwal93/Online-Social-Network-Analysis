@@ -1,0 +1,31 @@
+Grade: 0.00/10.00
+
+1 Deduction(s):
+
+--------------
+#1: 10.00 points
+Failing test: test_basic: 
+        @points=10
+        bonus points.
+        
+Traceback (most recent call last):
+  File "../assignments-sol/bonus/bonus_test.py", line 24, in test_basic
+    self.assertTrue(len(scores) > 0)
+TypeError: object of type 'NoneType' has no len()
+
+source:
+    def test_basic(self):
+         """
+         @points=10
+         bonus points.
+         """
+         g = nx.Graph([['A', 'B'],
+         			 ['B', 'C'],
+         			 ['A', 'D'],
+         	         ['D', 'E'],
+         	 		 ['E', 'F'],
+         			 ['A', 'F']])
+         scores = jaccard_wt(g, 'A')
+         self.assertTrue(len(scores) > 0)
+--------------
+
